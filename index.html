@@ -1,12 +1,29 @@
 <!doctype html>
 <html lang="es">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Customer Insights Portal</title>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
-</html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Encuesta Tienda Ciudad</title>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="./config.js"></script>
+  <style>
+    :root{--brand:#10049E;--bg:#f5f7fb;--text:#171729;--muted:#666b7a;--card:#fff;--line:#e7e8f1;--ok:#14a36d;--danger:#c62828}
+    *{box-sizing:border-box}body{margin:0;font-family:Inter,Arial,sans-serif;background:radial-gradient(circle at top left,#e8e5ff,transparent 35%),var(--bg);color:var(--text)}
+    .wrap{max-width:860px;margin:0 auto;padding:28px 18px 50px}.card{background:rgba(255,255,255,.94);border:1px solid var(--line);box-shadow:0 18px 50px rgba(16,4,158,.12);border-radius:28px;padding:28px}
+    .top{display:flex;align-items:center;gap:18px;margin-bottom:24px}.logo{width:92px;max-height:70px;object-fit:contain}.badge{display:inline-flex;background:#edeaff;color:var(--brand);font-weight:800;padding:8px 12px;border-radius:999px;font-size:13px}.h1{font-size:34px;line-height:1.08;margin:12px 0 10px;font-weight:900}.p{color:var(--muted);font-size:17px;line-height:1.55;margin:0 0 24px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:14px}.opt{border:2px solid #ececf5;background:#fff;border-radius:20px;padding:18px;text-align:left;cursor:pointer;transition:.18s;min-height:104px}.opt:hover{border-color:var(--brand);transform:translateY(-2px);box-shadow:0 12px 28px rgba(16,4,158,.13)}.icon{font-size:28px}.txt{font-weight:850;font-size:16px;margin-top:10px}.other{display:none;margin-top:18px}.other textarea{width:100%;min-height:110px;border:1px solid var(--line);border-radius:16px;padding:14px;font:inherit}.btn{background:var(--brand);color:white;border:0;border-radius:16px;padding:14px 18px;font-weight:900;cursor:pointer;margin-top:12px}.msg{margin-top:18px;padding:14px;border-radius:16px;font-weight:800;display:none}.ok{background:#e9fff5;color:#08784d}.err{background:#ffecec;color:#9b1c1c}.loading{background:#eef0ff;color:var(--brand)}
+    @media(max-width:720px){.grid{grid-template-columns:1fr}.h1{font-size:28px}.card{padding:20px}.top{align-items:flex-start;flex-direction:column}.logo{width:112px}}
+  </style>
+</head>
+<body>
+  <main class="wrap"><section class="card"><div class="top"><img class="logo" src="./assets/logo-tienda-ciudad.png" onerror="this.style.display='none'"/><div><span class="badge">Encuesta de experiencia</span><h1 class="h1">Queremos conocer tu experiencia</h1></div></div><p class="p">Vimos que dejaste un carrito sin finalizar. Tu respuesta nos ayuda a mejorar el checkout. Elegí el motivo principal:</p><div class="grid" id="options"></div><div class="other" id="otherBox"><textarea id="otherText" placeholder="Contanos brevemente qué pasó"></textarea><br><button class="btn" onclick="sendOther()">Enviar respuesta</button></div><div id="msg" class="msg"></div></section></main>
+<script>
+const reasons=[['no_interes','🙁','No me interesó finalizar la compra'],['qr_modo','📱','Tuve inconvenientes con el QR de MODO'],['cuotas_modo','💳','MODO no me mostró las cuotas necesarias'],['envio_caro','🚚','El envío era demasiado caro'],['pago_modo','🏦','Tuve inconvenientes al pagar con mi tarjeta dentro de MODO'],['otro','✍️','Otro motivo']];
+const qs=new URLSearchParams(location.search); const cfg=window.APP_CONFIG||{};
+const msg=document.getElementById('msg'); const options=document.getElementById('options'); const otherBox=document.getElementById('otherBox');
+let selected=null; reasons.forEach(r=>{const b=document.createElement('button');b.className='opt';b.innerHTML='<div class="icon">'+r[1]+'</div><div class="txt">'+r[2]+'</div>';b.onclick=()=>r[0]==='otro'?showOther(r):submit(r,'');options.appendChild(b)});
+function showMessage(text,type){msg.textContent=text;msg.className='msg '+type;msg.style.display='block'}
+function showOther(r){selected=r;otherBox.style.display='block';document.getElementById('otherText').focus()}
+function sendOther(){submit(selected,document.getElementById('otherText').value.trim())}
+async function submit(r,other){try{showMessage('Guardando respuesta...','loading'); if(!cfg.SUPABASE_URL||cfg.SUPABASE_URL.includes('PEGAR_')) throw new Error('Falta configurar config.js con la URL y anon key de Supabase.'); const supabase=window.supabase.createClient(cfg.SUPABASE_URL,cfg.SUPABASE_ANON_KEY); const payload={campaign_id:qs.get('campaign')||'carrito-abandonado',cart_id:qs.get('cart_id'),order_id:qs.get('order_id'),email:qs.get('email'),store:qs.get('store')||qs.get('tienda')||'Tienda Ciudad',seller:qs.get('seller'),reason_code:r[0],reason_label:r[2],other_text:other||null,user_agent:navigator.userAgent}; const {error}=await supabase.from('survey_responses').insert(payload); if(error) throw error; document.querySelector('.grid').style.display='none'; otherBox.style.display='none'; showMessage('Muchas gracias. Tu respuesta fue registrada correctamente.','ok')}catch(e){showMessage('No se pudo guardar: '+e.message,'err')}}
+</script>
+</body></html>

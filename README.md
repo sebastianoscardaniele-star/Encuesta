@@ -1,67 +1,36 @@
-# Customer Insights Portal
+# Customer Insights Portal - version estatica sin npm
 
-Aplicación corporativa para encuestas de carritos abandonados con:
+Esta version no usa npm, Vite ni build. Es ideal para Vercel cuando npm queda trabado.
 
-- React + Vite + TypeScript.
-- Supabase Auth.
-- Supabase Database.
-- Roles: `super_admin`, `admin`, `analista`.
-- Vista cliente `/s` para responder encuesta.
-- Panel administrador con dashboard, campañas, filtros y descarga CSV.
-- Estética Tienda Ciudad.
+## Deploy en Vercel
 
-## 1. Supabase
+Framework Preset: Other
+Install Command: vacio
+Build Command: vacio
+Output Directory: vacio
 
-Crear un proyecto en Supabase y ejecutar:
+La raiz del proyecto debe tener estos archivos:
+- index.html
+- admin.html
+- config.js
+- supabase.sql
+- assets/logo-tienda-ciudad.png
 
-`supabase/schema.sql`
+## Configuracion Supabase
 
-Luego crear el usuario administrador:
+1. Crear proyecto en Supabase.
+2. Ir a Project Settings > API.
+3. Copiar Project URL y anon public key.
+4. Pegarlas en config.js.
+5. Ejecutar supabase.sql en SQL Editor.
+6. Crear usuario admin en Authentication > Users > Add user.
+7. Copiar el UUID del usuario.
+8. En Table Editor > profiles, crear el perfil con role = super_admin.
 
-1. Supabase > Authentication > Users > Add user.
-2. Crear email y contraseña.
-3. Copiar el UUID del usuario.
-4. Ejecutar `supabase/create-admin.sql` reemplazando `PEGAR_UUID_DEL_USUARIO`.
-
-## 2. Variables de entorno
-
-En local crear `.env` copiando `.env.example`.
-
-En Vercel cargar estas variables:
-
-- `VITE_SUPABASE_URL`
-- `VITE_SUPABASE_ANON_KEY`
-
-Se obtienen en Supabase > Project Settings > API.
-
-## 3. Deploy en Vercel
-
-Framework Preset: `Vite`
-
-Build Command:
-
-`npm run build`
-
-Output Directory:
-
-`dist`
-
-Install Command:
-
-`npm install --no-audit --no-fund`
-
-## 4. URLs
-
-Panel administrador:
-
-`https://tu-dominio.vercel.app/`
+## URLs
 
 Encuesta cliente:
+/index.html?campaign=carrito-abandonado&email=cliente@demo.com&cart_id=123&store=Tienda%20Ciudad&seller=Seller%20Demo
 
-`https://tu-dominio.vercel.app/s?email=cliente@demo.com&tienda=Tienda%20Ciudad&seller=Seller%20Demo&cart_id=12345`
-
-## 5. Descarga de información
-
-Desde el panel: Respuestas > Descargar CSV.
-
-También se puede exportar desde Supabase > Table Editor > `survey_responses`.
+Admin:
+/admin.html
