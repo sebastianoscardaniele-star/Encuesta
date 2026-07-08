@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Administrador | Encuesta Tienda Ciudad</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+</head>
+<body>
+  <main class="wrap">
+    <section class="card">
+      <div class="header">
+        <div class="brand"><img src="assets/logo-tienda-ciudad.png" alt="Tienda Ciudad" /><span class="badge">Panel administrador</span></div>
+        <div class="topnav"><a class="badge" href="index.html">Ver encuesta</a><button id="logout" class="btn secondary hidden">Cerrar sesión</button></div>
+      </div>
+      <div id="loginBox">
+        <h1>Ingreso administrador</h1>
+        <p class="lead">Ingresá con el usuario administrador creado en Supabase Auth.</p>
+        <div class="grid" style="max-width:420px">
+          <input id="email" class="field" type="email" placeholder="Email administrador" />
+          <input id="password" class="field" type="password" placeholder="Contraseña" />
+          <button id="login" class="btn full">Ingresar</button>
+        </div>
+        <div id="loginMsg"></div>
+      </div>
+      <div id="dashboard" class="hidden">
+        <h1>Dashboard de respuestas</h1>
+        <p class="lead">Visualizá, filtrá y descargá las respuestas recopiladas.</p>
+        <div class="kpis">
+          <div class="kpi"><div id="total" class="num">0</div><div class="label">Respuestas totales</div></div>
+          <div class="kpi"><div id="today" class="num">0</div><div class="label">Respuestas hoy</div></div>
+          <div class="kpi"><div id="otros" class="num">0</div><div class="label">Otros motivos</div></div>
+          <div class="kpi"><div id="topMotivo" class="num" style="font-size:16px">-</div><div class="label">Motivo principal</div></div>
+        </div>
+        <div class="filters">
+          <input id="from" class="field" type="date" />
+          <input id="to" class="field" type="date" />
+          <input id="tienda" class="field" placeholder="Tienda" />
+          <input id="seller" class="field" placeholder="Seller" />
+          <input id="search" class="field" placeholder="Email / carrito" />
+        </div>
+        <div class="row">
+          <button id="apply" class="btn">Aplicar filtros</button>
+          <button id="clear" class="btn secondary">Limpiar</button>
+          <button id="csv" class="btn secondary">Descargar CSV</button>
+        </div>
+        <div class="split">
+          <div class="card" style="box-shadow:none"><h2>Motivos de abandono</h2><div id="motivosChart" class="grid"></div></div>
+          <div class="card" style="box-shadow:none"><h2>Respuestas por tienda</h2><div id="tiendasChart" class="grid"></div></div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Fecha</th><th>Email</th><th>Carrito</th><th>Orden</th><th>Tienda</th><th>Seller</th><th>Motivo</th><th>Detalle</th></tr></thead>
+            <tbody id="rows"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+  <script src="admin.js"></script>
+</body>
+</html>

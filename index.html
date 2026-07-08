@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Encuesta carrito abandonado | Tienda Ciudad</title>
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="config.js"></script>
+</head>
+<body>
+  <main class="wrap">
+    <section class="card">
+      <div class="header">
+        <div class="brand">
+          <img src="assets/logo-tienda-ciudad.png" alt="Tienda Ciudad" />
+        </div>
+        <a class="badge" href="admin.html">Acceso administrador</a>
+      </div>
+      <h1>¿Nos ayudás a mejorar tu experiencia?</h1>
+      <p class="lead">Hemos verificado que dejaste un carrito abandonado en nuestra tienda y queremos saber el motivo para poder mejorar nuestro servicio. Por favor, si podés tomarte 2 minutos para seleccionar una de las siguientes razones, a nosotros nos sería de mucha ayuda.</p>
+      <div id="options" class="grid options">
+        <button class="btn" data-motivo="No me interesó terminar la compra">No me interesó terminar la compra.</button>
+        <button class="btn" data-motivo="Tuve inconvenientes con el QR de MODO">Tuve inconvenientes con el QR de MODO.</button>
+        <button class="btn" data-motivo="MODO no me mostró las cuotas necesarias">MODO no me mostró las cuotas necesarias.</button>
+        <button class="btn" data-motivo="El envío era demasiado caro">El envío era demasiado caro.</button>
+        <button class="btn" data-motivo="Tuve inconvenientes al pagar con mi tarjeta dentro de MODO">Tuve inconvenientes a la hora de pagar con mi tarjeta dentro de MODO.</button>
+        <button class="btn secondary" id="otherBtn" data-motivo="Otro motivo">Otro motivo.</button>
+      </div>
+      <div id="otherBox" class="hidden" style="margin-top:18px">
+        <h2>Contanos el motivo</h2>
+        <textarea id="motivoTexto" class="field" rows="4" placeholder="Escribí brevemente qué pasó..."></textarea>
+        <div class="row" style="margin-top:12px">
+          <button id="sendOther" class="btn full">Enviar respuesta</button>
+          <button id="cancelOther" class="btn secondary full">Volver</button>
+        </div>
+      </div>
+      <div id="msg"></div>
+      <p class="muted">Muchísimas gracias por ayudarnos a mejorar la experiencia de compra.</p>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
